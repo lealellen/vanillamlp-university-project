@@ -43,6 +43,17 @@ class MLP:
         pass
 
     def accuracy(self, y_true, y_pred):
-        # Calcular acurácia (ou outra métrica)
+        acuraccy = y_true/y_pred
+        return acuraccy
+
+    def final_report():
+        """
+        Gera arquivos contendo as seguintes informações:
+            Hiperparâmetros finais da arquitetura da rede neural e hiperparâmetros de inicialização.
+            Pesos iniciais da rede.
+            Pesos finais da rede.
+            Erro cometido pela rede neural em cada iteração do treinamento.
+            Saídas produzidas pela rede neural para cada um dos dados de teste realizados
+        """
         pass
  
