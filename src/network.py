@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import random
+# Vamos usar o random para inicializar os pesos com valores aleatórios, o que garante que a rede não comece sempre do mesmo jeito
 
 class MLP:
     def __init__(self, input_size, hidden_layers, output_size, learning_rate=0.01, epochs=1000):
