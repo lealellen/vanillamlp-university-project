@@ -13,7 +13,7 @@ with zipfile.ZipFile(zip_file, 'r') as zip_ref:
 
 # Carregar os dados dos pixels do arquivo X.txt
 x_file = 'X.txt'
-X = np.loadtxt(x_file, delimiter=",")
+X = np.genfromtxt(x_file, delimiter=",") 
 
 # Carregar as letras correspondentes do arquivo Y_letra.txt
 y_file = 'Y_letra.txt'
