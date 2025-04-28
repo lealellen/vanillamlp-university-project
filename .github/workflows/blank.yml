@@ -40,7 +40,7 @@ jobs:
 
       # 6. Fazer upload do arquivo final_report.txt como artefato
       - name: Upload final report as artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2  # Usando a versão v2 para evitar erro
         with:
           name: final_report
           path: final_report.txt  # Ou o caminho completo, caso tenha especificado
