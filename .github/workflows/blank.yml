@@ -1,46 +1,35 @@
 name: CI
 
-# Define when the workflow will run
 on:
   push:
-    branches: [ "ellen" ]  # A cada commit na branch main
+    branches: [ "ellen" ]
   pull_request:
-    branches: [ "main" ]  # Quando um PR for aberto ou atualizado na branch main
-  workflow_dispatch:  # Permite rodar manualmente também, se necessário
+    branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Usando uma máquina virtual do Ubuntu
+    runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout do código
       - uses: actions/checkout@v4
 
-      # 2. Configuração do ambiente Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.8'  # Ou a versão que você está usando
+          python-version: '3.8'
 
-      # 3. Instalar dependências
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Assumindo que você tenha um requirements.txt
+          pip install -r requirements.txt
 
-      # 4. Rodar o script de treinamento
-      - name: Train neural network
+      - name: Train model
         run: |
-          python src/testarede.py  # Executa o script de treinamento após cada commit
+          python src/testarede.py
 
-      # 5. (Opcional) Rodar os testes, se você tiver algum
-      - name: Run tests
-        run: |
-          pytest src/tests.py -v -s  # Se você tiver testes configurados no seu projeto
-
-      # 6. Fazer upload do arquivo final_report.txt como artefato
-      - name: Upload final report as artifact
-        uses: actions/upload-artifact@v2  # Usando a versão v2 para evitar erro
+      - name: Upload final report
+        uses: actions/upload-artifact@v4
         with:
           name: final_report
-          path: final_report.txt  # Ou o caminho completo, caso tenha especificado
+          path: final_report.txt
