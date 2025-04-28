@@ -3,14 +3,14 @@ name: CI
 # Define when the workflow will run
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "ellen" ]  # A cada commit na branch main
   pull_request:
-    branches: [ "main" ]
-  workflow_dispatch:
+    branches: [ "main" ]  # Quando um PR for aberto ou atualizado na branch main
+  workflow_dispatch:  # Permite rodar manualmente também, se necessário
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Usando uma máquina virtual do Ubuntu
 
     steps:
       # 1. Checkout do código
@@ -31,7 +31,7 @@ jobs:
       # 4. Rodar o script de treinamento
       - name: Train neural network
         run: |
-          python src/testarede.py  # Executa o script de treinamento
+          python src/testarede.py  # Executa o script de treinamento após cada commit
 
       # 5. (Opcional) Rodar os testes, se você tiver algum
       - name: Run tests
