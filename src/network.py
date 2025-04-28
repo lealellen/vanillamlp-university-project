@@ -22,6 +22,13 @@ class MLP:
         self.out_weights = np.random.uniform(-1, 1, size=(self.hidden_layers, self.output_size))
         self.in_bias = np.random.uniform(-1, 1, size=(1, self.hidden_layers))
         self.out_bias = np.random.uniform(-1, 1, size=(1, self.output_size))
+
+        ##### Teste dps tirar
+
+        self.initial_in_weights = self.in_weights.copy()
+        self.initial_out_weights = self.out_weights.copy()
+        self.initial_in_bias = self.in_bias.copy()
+        self.initial_out_bias = self.out_bias.copy()
         
     def activation(self, z):
         return 1 / (1 + np.exp(-z))

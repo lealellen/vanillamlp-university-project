@@ -40,11 +40,11 @@ Y_train_onehot = onehot_encoder.fit_transform(integer_encoded)
 
 # Definir os parâmetros da rede neural
 input_size = X_train.shape[1]  # Número de características (120 pixels)
-hidden_layers = 64  # Número de neurônios na camada oculta
+hidden_layers = 3  # Número de neurônios na camada oculta
 output_size = len(np.unique(Y_encoded))  # Número de classes (letras diferentes)
 
 # Instanciar o modelo MLP
-mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=1000)
+mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=50)
 
 # Treinar o modelo
 print("Iniciando o treinamento...")
