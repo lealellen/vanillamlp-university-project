@@ -33,6 +33,17 @@ class MLP:
         y_pred = self.activation(final_input)
 
         return y_pred, final_input, hidden_input, hidden_output
+    
+    def update_weights(self, delta_oculta, delta_saida, X):
+        _, _, _, hidden_output = self.forward(X)
+        # Atualiza os pesos da camada de saída: produto da transposta da saída da camada oculta com o delta da camada de saída, multiplicado pela taxa de aprendizado.
+        self.out_weights += self.learning_rate * (hidden_output.T @ delta_saida)
+        # Atualiza o bias da camada de saída: soma do delta da camada de saída, multiplicado pela taxa de aprendizado.
+        self.out_bias += self.learning_rate * np.sum(delta_saida, axis=0)
+        # Atualiza os pesos da camada oculta: produto da transposta da entrada X com o delta da camada oculta, multiplicado pela taxa de aprendizado.
+        self.in_weights += self.learning_rate * (X.T @ delta_oculta)
+        # Atualiza o bias da camada oculta: soma do delta da camada oculta, multiplicado pela taxa de aprendizado.
+        self.in_bias += self.learning_rate * np.sum(delta_oculta, axis=0)
 
     def fit(self, X, y):
         errors = []  # Salva o erro por época
@@ -69,18 +80,6 @@ class MLP:
     def backward(self, X, y_true, y_pred):
         # Propagação para trás (backward pass) e cálculo dos gradientes
         pass
-
-    def update_weights(self, delta_oculta, delta_saida, X):
-        _, _, _, hidden_output = self.forward(X)
-        # Atualiza os pesos da camada de saída: produto da transposta da saída da camada oculta com o delta da camada de saída, multiplicado pela taxa de aprendizado.
-        self.out_weights += self.learning_rate * (hidden_output.T @ delta_saida)
-        # Atualiza o bias da camada de saída: soma do delta da camada de saída, multiplicado pela taxa de aprendizado.
-        self.out_bias += self.learning_rate * np.sum(delta_saida, axis=0)
-        # Atualiza os pesos da camada oculta: produto da transposta da entrada X com o delta da camada oculta, multiplicado pela taxa de aprendizado.
-        self.in_weights += self.learning_rate * (X.T @ delta_oculta)
-        # Atualiza o bias da camada oculta: soma do delta da camada oculta, multiplicado pela taxa de aprendizado.
-        self.in_bias += self.learning_rate * np.sum(delta_oculta, axis=0)
-
 
     def accuracy(self, y_true, y_pred):
         """
