@@ -3,6 +3,13 @@ import pandas as pd
 import random
 # Vamos usar o random para inicializar os pesos com valores aleatórios, o que garante que a rede não comece sempre do mesmo jeito
 
+# ToDO
+# 1. Implementar cross validation;
+# 2. Mudar o nome das variáveis (se quiser);
+# 3. Conseguir testar o conjunto de dados de caracteres
+# 4. Revisar o grid search
+# 5. 
+
 class MLP:
     def __init__(self, input_size, hidden_layers, output_size, learning_rate=0.01, epochs=1000):
         # Atribuindo os parâmetros como atributos da classe
@@ -25,6 +32,10 @@ class MLP:
     def activation_derivative(self, z):
         sig = self.activation(z)
         return sig * (1 - sig)
+    
+    def cross_validation():
+        # JULIA FAZER
+        pass
 
     def forward(self, X):
         hidden_input = X @ self.in_weights + self.in_bias
