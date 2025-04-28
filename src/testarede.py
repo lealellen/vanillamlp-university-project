@@ -37,5 +37,5 @@ acc = mlp.accuracy(y_test, y_pred)
 print(f"Acurácia no conjunto de teste: {acc * 100:.2f}%")
 
 # Gerar relatório
-mlp.final_report(errors, file_name="iris_final_report.txt")
+mlp.final_report(errors, file_name="final_report.txt")
 print("Treinamento e teste concluídos.")
