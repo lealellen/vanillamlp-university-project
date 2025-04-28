@@ -28,8 +28,19 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt  # Assumindo que você tenha um requirements.txt
 
-      # 4. Rodar os testes
+      # 4. Rodar o script de treinamento
+      - name: Train neural network
+        run: |
+          python src/testarede.py  # Executa o script de treinamento
+
+      # 5. (Opcional) Rodar os testes, se você tiver algum
       - name: Run tests
         run: |
-          # Rodando pytest no diretório src/tests.py
-          pytest src/tests.py -v -s
+          pytest src/tests.py -v -s  # Se você tiver testes configurados no seu projeto
+
+      # 6. Fazer upload do arquivo final_report.txt como artefato
+      - name: Upload final report as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: final_report
+          path: final_report.txt  # Ou o caminho completo, caso tenha especificado
