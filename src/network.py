@@ -34,8 +34,7 @@ class MLP:
 
         return y_pred, final_input, hidden_input, hidden_output
     
-    def update_weights(self, delta_oculta, delta_saida, X):
-        _, _, _, hidden_output = self.forward(X)
+    def update_weights(self, delta_oculta, delta_saida, X, hidden_output):
         # Atualiza os pesos da camada de saída: produto da transposta da saída da camada oculta com o delta da camada de saída, multiplicado pela taxa de aprendizado.
         self.out_weights += self.learning_rate * (hidden_output.T @ delta_saida)
         # Atualiza o bias da camada de saída: soma do delta da camada de saída, multiplicado pela taxa de aprendizado.
@@ -49,7 +48,7 @@ class MLP:
         errors = []  # Salva o erro por época
         for epoch in range(self.epochs):
             # Realiza a propagação para frente (forward pass) e calcula a previsão (y_pred), entradas e saídas das camadas.
-            y_pred, final_input, hidden_input, _ = self.forward(X)
+            y_pred, final_input, hidden_input, hidden_output = self.forward(X)
             # Calcula o erro entre as previsões (y_pred) e os valores reais (y).
             erro = y - y_pred
             # Calcula o delta da camada de saída: erro multiplicado pela derivada da função de ativação da camada de saída.
@@ -59,7 +58,7 @@ class MLP:
             # Calcula o delta da camada oculta: erro oculto multiplicado pela derivada da função de ativação da camada oculta.
             delta_oculta = erro_oculto * self.activation_derivative(hidden_input)
 
-            self.update_weights(delta_oculta, delta_saida, X)
+            self.update_weights(delta_oculta, delta_saida, X, hidden_output)
 
             # Calcular o erro total e adicionar ao histórico
             loss = np.mean(np.square(erro))  # Exemplo de MSE
