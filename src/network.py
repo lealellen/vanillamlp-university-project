@@ -14,17 +14,10 @@ class MLP:
         self.output_size = output_size
 
         # Inicializa os pesos e bias
-        self.in_weights, self.out_weights, self.in_bias, self.out_bias = self.initialize_weights()
-
-
-    def initialize_weights(self):
-                
-        in_weights = np.random.uniform(-1, 1, size=(self.input_size, self.hidden_layers))
-        out_weights = np.random.uniform(-1, 1, size=(self.hidden_layers, self.output_size))
-        in_bias = np.random.uniform(-1, 1, size=(1, self.hidden_layers))
-        out_bias = np.random.uniform(-1, 1, size=(1, self.output_size))
-
-        return in_weights, out_weights, in_bias, out_bias
+        self.in_weights = np.random.uniform(-1, 1, size=(self.input_size, self.hidden_layers))
+        self.out_weights = np.random.uniform(-1, 1, size=(self.hidden_layers, self.output_size))
+        self.in_bias = np.random.uniform(-1, 1, size=(1, self.hidden_layers))
+        self.out_bias = np.random.uniform(-1, 1, size=(1, self.output_size))
         
     def activation(self, z):
         return 1 / (1 + np.exp(-z))
