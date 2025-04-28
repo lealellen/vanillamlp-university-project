@@ -1,7 +1,7 @@
 import numpy as np
 import zipfile
 import os
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from network import MLP 
 
 # Descompactar o arquivo X_png.zip
@@ -30,6 +30,14 @@ Y_train = Y_encoded[:-130]
 X_test = X[-130:]
 Y_test = Y_encoded[-130:]
 
+label_encoder = LabelEncoder()
+integer_encoded = label_encoder.fit_transform(Y_train)
+
+# Agora faz one-hot encoding
+onehot_encoder = OneHotEncoder(sparse_output=False)
+integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
+Y_train_onehot = onehot_encoder.fit_transform(integer_encoded)
+
 # Definir os parâmetros da rede neural
 input_size = X_train.shape[1]  # Número de características (120 pixels)
 hidden_layers = 64  # Número de neurônios na camada oculta
@@ -40,7 +48,7 @@ mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=100
 
 # Treinar o modelo
 print("Iniciando o treinamento...")
-errors = mlp.fit(X_train, Y_train)
+errors = mlp.fit(X_train, Y_train_onehot)
 
 # Avaliar o modelo
 y_pred = mlp.predict(X_test)
