@@ -1,81 +1,41 @@
 import numpy as np
-import zipfile
-import os
-from sklearn.preprocessing import LabelEncoder, OneHotEncoder
-from network import MLP
-from PIL import Image
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+from network import MLP  # Importando sua classe MLP
 
-# Descompactar o arquivo X_png.zip
-zip_file = 'X_png.zip'
-output_folder = 'images/'
+# Carregar o dataset Iris
+iris = load_iris()
+X = iris.data  # 4 features por flor
+y = iris.target  # 0, 1, 2
 
-with zipfile.ZipFile(zip_file, 'r') as zip_ref:
-    zip_ref.extractall(output_folder)
+# Dividir entre treino e teste
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Caminho correto para a pasta descompactada
-image_folder = os.path.join(output_folder, 'X_png')
-
-# Carregar os dados dos pixels do arquivo X.txt
-x_file = 'X.txt'
-X = np.genfromtxt(x_file, delimiter=",")
-
-# Carregar as letras correspondentes do arquivo Y_letra.txt
-y_file = 'Y_letra.txt'
-with open(y_file, 'r') as file:
-    Y = file.read().splitlines()
-
-# Converter as letras para valores numéricos
-label_encoder = LabelEncoder()
-Y_encoded = label_encoder.fit_transform(Y)
-
-# Separar os dados em treino e teste (últimos 130 para teste)
-X_train = X[:-130]
-Y_train = Y_encoded[:-130]
-
-X_test = X[-130:]
-Y_test = Y_encoded[-130:]
-
-# One-hot encoding para as saídas de treino
+# One-hot encode dos rótulos
 onehot_encoder = OneHotEncoder(sparse_output=False)
-Y_train_reshaped = Y_train.reshape(-1, 1)
-Y_train_onehot = onehot_encoder.fit_transform(Y_train_reshaped)
+y_train_reshaped = y_train.reshape(-1, 1)
+y_train_onehot = onehot_encoder.fit_transform(y_train_reshaped)
 
-# Definir os parâmetros da rede neural
-input_size = X_train.shape[1]  # Número de características (120 pixels)
-hidden_layers = 3              # Número de neurônios na camada oculta (você pode ajustar)
-output_size = len(np.unique(Y_encoded))  # Número de classes (letras diferentes)
+# Definindo os parâmetros da rede
+input_size = X_train.shape[1]  # 4
+hidden_layers = 5  # Pode ser 5 neurônios escondidos
+output_size = len(np.unique(y))  # 3 classes (0, 1, 2)
 
-# Instanciar o modelo MLP
-mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=50)
+# Instanciar e treinar a MLP
+mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=2000)
 
-# Treinar o modelo
 print("Iniciando o treinamento...")
-errors = mlp.fit(X_train, Y_train_onehot)
+errors = mlp.fit(X_train, y_train_onehot)
 
-# Avaliar o modelo
-y_pred = mlp.predict(X_test)
-accuracy = mlp.accuracy(Y_test, y_pred)
-print(f"Acurácia do modelo: {accuracy * 100:.2f}%")
+# Fazer predições
+y_pred_probs = mlp.predict(X_test)
+y_pred = np.argmax(y_pred_probs, axis=1)  # Pegar a classe de maior probabilidade
 
-# Gerar o relatório final
-mlp.final_report(errors, file_name="final_report.txt")
-print("Treinamento concluído e relatório gerado.")
+# Avaliar
+acc = mlp.accuracy(y_test, y_pred)
+print(f"Acurácia no conjunto de teste: {acc * 100:.2f}%")
 
-# -------------------------------------------------------------------------
-# OPCIONAL: Se você quiser carregar as imagens da pasta X_png:
-
-def load_images_from_folder(folder, target_size=(32, 32)):
-    images = []
-    filenames = sorted(os.listdir(folder))  # Para garantir ordem
-    for filename in filenames:
-        if filename.endswith('.png'):
-            img_path = os.path.join(folder, filename)
-            img = Image.open(img_path).convert('L')  # 'L' = grayscale (preto e branco)
-            img = img.resize(target_size)
-            img_array = np.array(img) / 255.0  # Normalizar entre 0 e 1
-            images.append(img_array.flatten())  # Achatar a imagem
-    return np.array(images)
-
-# Exemplo para carregar as imagens:
-# images_data = load_images_from_folder(image_folder)
-# print("Formato dos dados de imagem:", images_data.shape)
+# Gerar relatório
+mlp.final_report(errors, file_name="iris_final_report.txt")
+print("Treinamento e teste concluídos.")
