@@ -13,39 +13,14 @@ class MLP:
         self.hidden_layers = hidden_layers
         self.output_size = output_size
 
+        # Inicializa os pesos e bias
+        self.initialize_weights()
+
     def initialize_weights(self):
                 
-        """     in_weigths 
-            Pesos entrada -> camada escondida
-            O resultado vai mais ou menos isso
-            [0.5, 0.5, 0.5], # Pesos do neurônio de entrada 1 para os 3 neurônios escondidos
-            [0.5, 0.5, 0.5], # Pesos do neurônio de entrada 2 para os 3 neurônios escondidos
-            [0.5, 0.5, 0.5] # Pesos do neurônio de entrada 3 para os 3 neurônios escondidos
-        """
         self.in_weigths = [[random.uniform(-1, 1) for _ in range(self.hidden_layers)] for _ in range(self.input_size)]
-        
-        
-        """     out_weigths 
-            # Pesos camada escondida -> saída
-            O resultado vai mais ou menos isso
-            [0.5, 0.5, 0.5], # Pesos do neurônio escondido 1 para os 3 neurônios da saída
-            [0.5, 0.5, 0.5], # Pesos do neurônio escondido 2 para os 3 neurônios da saída
-            [0.5, 0.5, 0.5] # Pesos do neurônio escondido 3 para os 3 neurônios da saída
-        """
         self.out_weigths = [[random.uniform(-1, 1) for _ in range(self.output_size)] for _ in range(self.hidden_layers)]
-
-        """     hidden_bias
-            # Bias camada escondida 
-            O resultado vai mais ou menos isso
-            [0, 0, 0] # Um bias para cada neurônio da camada escondida
-        """
         self.hidden_bias = [random.uniform(-1, 1) for _ in range(self.hidden_layers)]
-
-        """     out_bias 
-            # Pesos camada de saída
-            O resultado vai mais ou menos isso
-            [0, 0, 0] # Um bias para cada neurônio de saída
-        """
         self.out_bias = [random.uniform(-1, 1) for _ in range(self.output_size)]
 
     def activation(self, z):
