@@ -51,17 +51,11 @@ class MLP:
             y_pred, final_input, hidden_input, hidden_output = self.forward(X)
             # Calcula o erro entre as previsões (y_pred) e os valores reais (y).
             erro = y - y_pred
-            # Calcula o delta da camada de saída: erro multiplicado pela derivada da função de ativação da camada de saída.
-            delta_saida = erro * self.activation_derivative(final_input)
-            # Calcula o erro da camada oculta: multiplicação do delta da saída pelos pesos de saída transpostos.
-            erro_oculto = delta_saida @ self.out_weights.T
-            # Calcula o delta da camada oculta: erro oculto multiplicado pela derivada da função de ativação da camada oculta.
-            delta_oculta = erro_oculto * self.activation_derivative(hidden_input)
 
-            self.update_weights(delta_oculta, delta_saida, X, hidden_output)
+            self.backward(X, erro, final_input, hidden_input, hidden_output, y_pred)
 
             # Calcular o erro total e adicionar ao histórico
-            loss = np.mean(np.square(erro))  # Exemplo de MSE
+            loss = np.mean(np.square(erro))  # erro quadrático médio (MSE) para medir o quão distante a previsão y_pred está do verdadeiro y
             errors.append(loss)
             if epoch % 100 == 0:  # Exibe a cada 100 épocas
                 print(f"Epoch {epoch}/{self.epochs}, Loss: {loss}")
@@ -72,13 +66,15 @@ class MLP:
         y_pred, _, _, _ = self.forward(X)
         return y_pred
 
-    def compute_loss(self, y_true, y_pred):
-        # Calcular a função de perda (ex: MSE, cross-entropy)
-        pass
+    def backward(self, X, erro, final_input, hidden_input, hidden_output, y_pred):
+        # Calcula o delta da camada de saída: erro multiplicado pela derivada da função de ativação da camada de saída.
+        delta_saida = erro * self.activation_derivative(final_input)
+        # Calcula o erro da camada oculta: multiplicação do delta da saída pelos pesos de saída transpostos.
+        erro_oculto = delta_saida @ self.out_weights.T
+        # Calcula o delta da camada oculta: erro oculto multiplicado pela derivada da função de ativação da camada oculta.
+        delta_oculta = erro_oculto * self.activation_derivative(hidden_input)
 
-    def backward(self, X, y_true, y_pred):
-        # Propagação para trás (backward pass) e cálculo dos gradientes
-        pass
+        self.update_weights(delta_oculta, delta_saida, X, hidden_output)
 
     def accuracy(self, y_true, y_pred):
         """
