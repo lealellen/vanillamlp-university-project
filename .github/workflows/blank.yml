@@ -32,4 +32,4 @@ jobs:
       - name: Run tests
         run: |
           # Rodando pytest no diretório src/tests.py
-          pytest src/tests.py -v
+          pytest src/tests.py -v -s
