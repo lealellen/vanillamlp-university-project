@@ -23,7 +23,7 @@ hidden_layers = 5  # Pode ser 5 neurônios escondidos
 output_size = len(np.unique(y))  # 3 classes (0, 1, 2)
 
 # Instanciar e treinar a MLP
-mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=2000)
+mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=20000)
 
 print("Iniciando o treinamento...")
 errors = mlp.fit(X_train, y_train_onehot)
