@@ -8,7 +8,8 @@ import random
 # 2. Mudar o nome das variáveis (se quiser);
 # 3. Conseguir testar o conjunto de dados de caracteres
 # 4. Revisar o grid search
-# 5. 
+# 5. Implementar função para matriz de confusão
+# 6. Implementar parada antecipada
 
 class MLP:
     def __init__(self, input_size, hidden_layers, output_size, learning_rate=0.01, epochs=1000):
@@ -57,6 +58,9 @@ class MLP:
 
     def fit(self, X, y):
         errors = []  # Salva o erro por época
+        best_loss = np.inf
+        epochs_without_improvement = 0
+        patience = 10 # Definir a quantidade de epocas q a gnt espera p parar
         for epoch in range(self.epochs):
             # Realiza a propagação para frente (forward pass) e calcula a previsão (y_pred), entradas e saídas das camadas.
             y_pred, final_input, hidden_input, hidden_output = self.forward(X)
@@ -70,7 +74,14 @@ class MLP:
             errors.append(loss)
             if epoch % 100 == 0:  # Exibe a cada 100 épocas
                 print(f"Epoch {epoch}/{self.epochs}, Loss: {loss}")
-        
+            if loss < best_loss:
+                best_loss = loss
+                epochs_without_improvement = 0
+            else:
+                epochs_without_improvement += 1
+            if epochs_without_improvement >= patience:
+                print(f"Parada antecipada na época: {epoch}")
+                break
         return errors
                 
     def predict(self, X):
