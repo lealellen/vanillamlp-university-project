@@ -58,7 +58,7 @@ class MLP:
 
     def fit(self, X, y):
         errors = []  # Salva o erro por época
-        best_loss = None
+        best_loss = np.inf
         epochs_without_improvement = 0
         patience = 10 # Definir a quantidade de epocas q a gnt espera p parar
         for epoch in range(self.epochs):
