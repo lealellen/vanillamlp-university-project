@@ -95,6 +95,7 @@ def matriz_confusao(y_true, y_pred, labels=None):
     
     # Calcular métricas
     acuracia = np.trace(matriz) / np.sum(matriz)
+    precisao = np.diag(matriz) / np.sum(matriz, axis=0)
     precisao = np.where(np.sum(matriz, axis=0) != 0, precisao, 0)
     recall = np.diag(matriz) / np.sum(matriz, axis=1)
     f1 = 2 * (precisao * recall) / (precisao + recall)
