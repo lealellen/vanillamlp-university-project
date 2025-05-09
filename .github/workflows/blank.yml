@@ -30,7 +30,7 @@ jobs:
         python main.py | tee saida_execucao.txt
 
     - name: Upload dos arquivos de saída
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: arquivos-de-relatorio
         path: |
