@@ -1,8 +1,12 @@
 import numpy as np
+import pandas as pd
 from sklearn.datasets import load_iris
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import OneHotEncoder, LabelEncoder
-from network import MLP  # Importando sua classe MLP
+from sklearn.preprocessing import StandardScaler
+from mlp import MLP
+from metricas import acuracia, mse, validacao_cruzada, matriz_confusao
+from sklearn.preprocessing import OneHotEncoder
+
 
 # Carregar o dataset Iris
 iris = load_iris()
@@ -23,7 +27,7 @@ hidden_layers = 5  # Pode ser 5 neurônios escondidos
 output_size = len(np.unique(y))  # 3 classes (0, 1, 2)
 
 # Instanciar e treinar a MLP
-mlp = MLP(input_size, hidden_layers, output_size, learning_rate=0.01, epochs=2000)
+mlp = MLP(input_size,hidden_layers, output_size, taxa_aprendizado=0.01, epocas=20000)
 
 print("Iniciando o treinamento...")
 errors = mlp.fit(X_train, y_train_onehot)
@@ -33,9 +37,24 @@ y_pred_probs = mlp.predict(X_test)
 y_pred = np.argmax(y_pred_probs, axis=1)  # Pegar a classe de maior probabilidade
 
 # Avaliar
-acc = mlp.accuracy(y_test, y_pred)
+acc = acuracia(y_test, y_pred)
 print(f"Acurácia no conjunto de teste: {acc * 100:.2f}%")
 
+# Validação Cruzada
+
+validacao_cruzada(x_treino=X_train,
+                  k_folds=5, 
+                  y_treino=y_train_onehot, 
+                  model_params={
+        "tamanho_entrada": input_size,
+        "camadas_escondidas": hidden_layers,
+        "tamanho_saida": output_size,
+        "taxa_aprendizado": 0.01,
+        "epocas": 20000
+    })
+
+matriz_confusao(y_test,y_pred)
+
 # Gerar relatório
-mlp.final_report(errors, file_name="final_report.txt")
+mlp.relatorio_final(errors, X_test, y_test)
 print("Treinamento e teste concluídos.")
