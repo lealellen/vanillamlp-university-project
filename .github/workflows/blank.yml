@@ -27,7 +27,7 @@ jobs:
 
     - name: Executar main.py
       run: |
-        python main.py | tee saida_execucao.txt
+        python main.py
 
     - name: Upload dos arquivos de saída
       uses: actions/upload-artifact@v4
@@ -38,4 +38,3 @@ jobs:
           pesosiniciais.txt
           pesosfinais.txt
           erro.txt
-          saida_execucao.txt
