@@ -1,5 +1,3 @@
 numpy
 pandas
-pytest
-pillow
 scikit-learn
