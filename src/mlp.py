@@ -111,28 +111,38 @@ class MLP:
             ● Um arquivo contendo as saídas produzidas pela rede neural para cada um dos
             dados de teste realizados VER
         """
+        # Salvando hiperparâmetros finais
         with open("hiperparametros.txt", "w") as f:
             f.write("Hiperparâmetros Finais e de Inicialização\n")
             f.write(f"Tamanho Entrada: {self.tamanho_entrada}\n")
             f.write(f"Camadas Ocultas: {self.camadas_escondidas}\n")
             f.write(f"Tamanho Saída: {self.tamanho_saida}\n\n")
 
+        # Salvando pesos finais
         with open("pesosfinais.txt", "w") as f:
             f.write("\nPesos Finais:\n")
             f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
             
+        # Salvando erro por época
         with open("erro.txt", "w") as f:
-            # VOCÊ ACHA RELEVANTE TRAZER UMA INFOMARMAÇÃO DE QUE A PARADA ANTECIPADA ACONTECEU NA EPOCA X?
             f.write(f"Épocas: {self.epocas}\n")
             f.write("\nErro por Época:\n")
             for epoca, erro in enumerate(erros):
                 f.write(f"Época {epoca + 1}: Erro = {erro}\n")
 
+        # Verificando se os dados de teste foram passados
         if X_test is not None and y_test is not None:
+            # Verificando se y_test é one-hot encoded ou rótulos diretos
+            if y_test.ndim == 1:
+                y_true = y_test  # Se já for um vetor de rótulos, usamos diretamente
+            else:
+                y_true = np.argmax(y_test, axis=1)  # Caso seja one-hot encoded
+
+            # Predição da rede
             y_pred_probs = self.predict(X_test)
             y_pred = np.argmax(y_pred_probs, axis=1)
-            y_true = np.argmax(y_test, axis=1)  # caso y_test esteja one-hot
 
+            # Salvando saídas de teste
             with open("saidas_teste.txt", "w") as f:
                 for i in range(len(X_test)):
                     f.write(f"Instância {i}:\n")
