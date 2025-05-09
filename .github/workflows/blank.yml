@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Clonar repositório
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Configurar Python
       uses: actions/setup-python@v4
@@ -30,7 +30,7 @@ jobs:
         python main.py | tee saida_execucao.txt
 
     - name: Upload do relatório final
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: relatorio-final
         path: |
