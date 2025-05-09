@@ -93,7 +93,7 @@ class MLP:
             if epocas_sem_melhora >= paciencia:
                 print(f"Parada antecipada na época {epoca}")
                 break
-        return erros, 
+        return erros
 
     def predict(self, X):
         """Realiza a previsão para novos dados"""
