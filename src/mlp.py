@@ -93,7 +93,7 @@ class MLP:
         y_pred, _, _, _ = self.forward(X)
         return y_pred
 
-    def relatorio_final(self, erros):
+    def relatorio_final(self, erros, nome_arquivo=None):
         """Arquivos de saída úteis para o seu trabalho:
             ● Um arquivo contendo os hiperparâmetros finais da arquitetura da rede neural e
             hiperparâmetros de inicialização. VER
