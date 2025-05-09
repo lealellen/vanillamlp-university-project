@@ -93,21 +93,35 @@ class MLP:
         y_pred, _, _, _ = self.forward(X)
         return y_pred
 
-    def relatorio_final(self, erros, nome_arquivo="relatorio_final.txt"):
-        """Gera um arquivo de relatório com métricas e pesos finais"""
-        with open(nome_arquivo, "w") as f:
-            f.write("Relatório Final - MLP\n")
-            f.write(f"Épocas: {self.epocas}\n")
-            f.write(f"Taxa de Aprendizado: {self.taxa_aprendizado}\n")
+    def relatorio_final(self, erros):
+        """Arquivos de saída úteis para o seu trabalho:
+            ● Um arquivo contendo os hiperparâmetros finais da arquitetura da rede neural e
+            hiperparâmetros de inicialização. VER
+            ● Um arquivo contendo os pesos iniciais da rede. 
+            ● Um arquivo contendo os pesos finais da rede.
+            ● Um arquivo contendo o erro cometido pela rede neural em cada iteração do
+            treinamento.
+            ● Um arquivo contendo as saídas produzidas pela rede neural para cada um dos
+            dados de teste realizados VER
+        """
+        with open("hiperparametros.txt", "w") as f:
+            f.write("Hiperparâmetros Finais e de Inicialização\n")
             f.write(f"Tamanho Entrada: {self.tamanho_entrada}\n")
             f.write(f"Camadas Ocultas: {self.camadas_escondidas}\n")
             f.write(f"Tamanho Saída: {self.tamanho_saida}\n\n")
+            
+        with open("pesosiniciais.txt", "w") as f:
             f.write("Pesos Iniciais:\n")
             f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
             f.write("\nBias Iniciais:\n")
             f.write(f"{self.bias_entrada}\n{self.bias_saida}\n")
+
+        with open("pesosfinais.txt", "w") as f:
+            f.write("\nPesos Finais:\n")
+            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
+            
+        with open("erro.txt", "w") as f:
+            f.write(f"Épocas: {self.epocas}\n")
             f.write("\nErro por Época:\n")
             for epoca, erro in enumerate(erros):
                 f.write(f"Época {epoca + 1}: Erro = {erro}\n")
-            f.write("\nPesos Finais:\n")
-            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
