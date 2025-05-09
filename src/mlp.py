@@ -61,6 +61,12 @@ class MLP:
 
     def fit(self, X, y):
         """Treina a rede com base nos dados de entrada"""
+        with open("pesosiniciais.txt", "w") as f:
+            f.write("Pesos Iniciais:\n")
+            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
+            f.write("\nBias Iniciais:\n")
+            f.write(f"{self.bias_entrada}\n{self.bias_saida}\n")
+
         erros = []
         melhor_erro = np.inf
         paciencia = 10
@@ -109,12 +115,6 @@ class MLP:
             f.write(f"Tamanho Entrada: {self.tamanho_entrada}\n")
             f.write(f"Camadas Ocultas: {self.camadas_escondidas}\n")
             f.write(f"Tamanho Saída: {self.tamanho_saida}\n\n")
-            
-        with open("pesosiniciais.txt", "w") as f:
-            f.write("Pesos Iniciais:\n")
-            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
-            f.write("\nBias Iniciais:\n")
-            f.write(f"{self.bias_entrada}\n{self.bias_saida}\n")
 
         with open("pesosfinais.txt", "w") as f:
             f.write("\nPesos Finais:\n")
