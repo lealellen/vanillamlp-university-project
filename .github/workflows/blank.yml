@@ -27,7 +27,7 @@ jobs:
 
     - name: Executar main.py
       run: |
-        python main.py
+        python src/main.py
 
     - name: Upload dos arquivos de saída
       uses: actions/upload-artifact@v4
