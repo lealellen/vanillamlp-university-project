@@ -28,6 +28,12 @@ class MLP:
         self.bias_entrada = np.random.uniform(-1, 1, size=(1, self.camadas_escondidas))
         self.bias_saida = np.random.uniform(-1, 1, size=(1, self.tamanho_saida))
 
+        with open("pesosiniciais.txt", "w") as f:
+            f.write("Pesos Iniciais:\n")
+            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
+            f.write("\nBias Iniciais:\n")
+            f.write(f"{self.bias_entrada}\n{self.bias_saida}\n")
+
     def funcao_ativacao(self, z):
         """Função de ativação sigmoide"""
         return 1 / (1 + np.exp(-z))
@@ -61,11 +67,6 @@ class MLP:
 
     def fit(self, X, y):
         """Treina a rede com base nos dados de entrada"""
-        with open("pesosiniciais.txt", "w") as f:
-            f.write("Pesos Iniciais:\n")
-            f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
-            f.write("\nBias Iniciais:\n")
-            f.write(f"{self.bias_entrada}\n{self.bias_saida}\n")
 
         erros = []
         melhor_erro = np.inf
@@ -91,15 +92,16 @@ class MLP:
 
             if epocas_sem_melhora >= paciencia:
                 print(f"Parada antecipada na época {epoca}")
+                epoca_parada = epoca
                 break
-        return erros
+        return erros, epoca_parada
 
     def predict(self, X):
         """Realiza a previsão para novos dados"""
         y_pred, _, _, _ = self.forward(X)
         return y_pred
 
-    def relatorio_final(self, erros, nome_arquivo=None):
+    def relatorio_final(self, erros, X_test=None, y_test=None):
         """Arquivos de saída úteis para o seu trabalho:
             ● Um arquivo contendo os hiperparâmetros finais da arquitetura da rede neural e
             hiperparâmetros de inicialização. VER
@@ -121,7 +123,21 @@ class MLP:
             f.write(f"{self.pesos_entrada}\n{self.pesos_saida}\n")
             
         with open("erro.txt", "w") as f:
+            # VOCÊ ACHA RELEVANTE TRAZER UMA INFOMARMAÇÃO DE QUE A PARADA ANTECIPADA ACONTECEU NA EPOCA X?
             f.write(f"Épocas: {self.epocas}\n")
             f.write("\nErro por Época:\n")
             for epoca, erro in enumerate(erros):
                 f.write(f"Época {epoca + 1}: Erro = {erro}\n")
+
+        if X_test is not None and y_test is not None:
+            y_pred_probs = self.predict(X_test)
+            y_pred = np.argmax(y_pred_probs, axis=1)
+            y_true = np.argmax(y_test, axis=1)  # caso y_test esteja one-hot
+
+            with open("saidas_teste.txt", "w") as f:
+                for i in range(len(X_test)):
+                    f.write(f"Instância {i}:\n")
+                    f.write(f"Entrada: {X_test[i]}\n")
+                    f.write(f"Classe verdadeira: {y_true[i]}\n")
+                    f.write(f"Saída da rede: {y_pred_probs[i]}\n")
+                    f.write(f"Classe predita: {y_pred[i]}\n\n")
